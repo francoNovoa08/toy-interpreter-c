@@ -3,3 +3,7 @@
 a.out
 *.exe
 *.out
+
+test_token
+
+compile_flags.txt
