@@ -2,7 +2,7 @@
 #define TOKEN_H
 
 #include <stddef.h>
-typedef enum TokenTypeTag {
+typedef enum {
   TOKEN_NUMBER,
   TOKEN_PLUS,
   TOKEN_MINUS,
