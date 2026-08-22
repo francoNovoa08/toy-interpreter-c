@@ -8,6 +8,7 @@ AST_Node *parse_additive(ParserState *state) {
   AST_Node *tree = parse_multiplicative(state);
   Token current_token = tokens[state->pos];
   if (tree == NULL) {
+    state->error_message = "Unable to parse multiplicative.";
     return NULL;
   }
 
@@ -16,6 +17,7 @@ AST_Node *parse_additive(ParserState *state) {
       (current_token.type == TOKEN_PLUS || current_token.type == TOKEN_MINUS)) {
     AST_Node *consumed_token_node = AST_build_node_from_token(current_token);
     if (consumed_token_node == NULL) {
+      state->error_message = "Unable to build operator node.";
       return NULL;
     }
 
@@ -25,11 +27,13 @@ AST_Node *parse_additive(ParserState *state) {
     if (state->pos < state->token_count) {
       current_token = tokens[state->pos];
       if (current_token.type != TOKEN_NUMBER) {
+        state->error_message = "Malformed tokens: cannot chain operators together.";
         return NULL;
       }
       AST_Node *new_node = parse_multiplicative(state);
       current_token = tokens[state->pos];
       if (new_node == NULL) {
+        state->error_message = "Unable to parse multiplicative.";
         return NULL;
       }
 
@@ -45,11 +49,13 @@ AST_Node *parse_multiplicative(ParserState *state) {
   Token *tokens = state->tokens;
   Token current_token = tokens[state->pos];
   if (current_token.type != TOKEN_NUMBER) {
+    state->error_message = "Malformed tokens: cannot start with a non-number.";
     return NULL;
   }
 
   AST_Node *tree = AST_build_node_from_token(current_token);
   if (tree == NULL) {
+    state->error_message = "Unable to build node from token.";
     return NULL;
   }
 
@@ -60,6 +66,7 @@ AST_Node *parse_multiplicative(ParserState *state) {
   current_token = tokens[state->pos];
 
   if (current_token.type == TOKEN_NUMBER) {
+    state->error_message = "Malformed tokens: cannot chain operands together.";
     return NULL;
   }
 
@@ -68,6 +75,7 @@ AST_Node *parse_multiplicative(ParserState *state) {
       (current_token.type == TOKEN_TIMES || current_token.type == TOKEN_OVER)) {
     AST_Node *consumed_token_node = AST_build_node_from_token(current_token);
     if (consumed_token_node == NULL) {
+      state->error_message = "Unable to build operator node.";
       return NULL;
     }
 
@@ -77,10 +85,12 @@ AST_Node *parse_multiplicative(ParserState *state) {
     if (state->pos < state->token_count) {
       current_token = tokens[state->pos];
       if (current_token.type != TOKEN_NUMBER) {
+        state->error_message = "Malformed tokens: cannot chain operators together.";
         return NULL;
       }
       AST_Node *new_node = AST_build_node_from_token(current_token);
       if (new_node == NULL) {
+        state->error_message = "Unable to build node from token.";
         return NULL;
       }
 
