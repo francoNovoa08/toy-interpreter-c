@@ -16,6 +16,7 @@ void test_additive_single_operand();
 void test_additive_no_relevant_operators();
 
 int main() {
+    setbuf(stdout, NULL);
     // parse_multiplicative tests
     test_multiplicative_single_operator();
     test_multiplicative_multiple_operands();
@@ -58,7 +59,7 @@ void test_multiplicative_single_operator() {
     assert(node->left->data.number_value == 10);
     assert(node->left->type == NODE_NUMBER);
     assert(node->right->data.number_value == 5);
-    assert(state->pos == 2);
+    assert(state->pos == 3);
 
     printf("test_multiplicative_single_operator passed.\n");
     free(token_array);
@@ -68,7 +69,8 @@ void test_multiplicative_single_operator() {
 void test_multiplicative_multiple_operands() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1*2/3+4", &count);
+    char input[] = "1*2/3+4";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -95,7 +97,8 @@ void test_multiplicative_multiple_operands() {
 void test_multiplicative_malformed_operands() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1*/2", &count);
+    char input[] = "1*/2";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -116,7 +119,8 @@ void test_multiplicative_malformed_operands() {
 void test_multiplicative_single_operand() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1", &count);
+    char input[] = "1";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -139,7 +143,8 @@ void test_multiplicative_single_operand() {
 void test_multiplicative_no_relevant_operands() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1+2", &count);
+    char input[] = "1+2";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -194,7 +199,8 @@ void test_additive_single_operator() {
 void test_additive_multiple_operands() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1+2-3*4", &count);
+    char input[] = "1+2-3*4";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -223,7 +229,8 @@ void test_additive_multiple_operands() {
 void test_additive_single_operand() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1", &count);
+    char input[] = "1";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;
@@ -246,7 +253,8 @@ void test_additive_single_operand() {
 void test_additive_no_relevant_operators() {
     // Arrange
     size_t count;
-    Token* tokens = tokenise_string("1/2", &count);
+    char input[] = "1/2";
+    Token* tokens = tokenise_string(input, &count);
 
     ParserState* state = malloc(sizeof(ParserState));
     state->tokens = tokens;

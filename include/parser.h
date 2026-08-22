@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "AST.h"
+#include "utils/AST.h"
 #include "token.h"
 
 typedef struct {

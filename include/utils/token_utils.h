@@ -4,6 +4,8 @@
 /**
  * @brief Removes all whitespace in place from a string
  *
+ * @pre @p string must be a char[], not a string literal
+ *
  * @param string The string to remove whitespace from
  */
 void remove_all_whitespace(char *string);

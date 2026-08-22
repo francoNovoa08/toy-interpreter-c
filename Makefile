@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -Wall -Wextra -Iinclude -g
 
-LIB_SRC = src/token.c src/utils/token_utils.c src/parser.c
+LIB_SRC = src/token.c src/utils/token_utils.c src/parser.c src/utils/AST.c
 
 TARGET = interpreter
 
