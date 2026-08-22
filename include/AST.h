@@ -9,7 +9,7 @@ typedef enum {
     NODE_OVER,
 } NodeType;
 
-typedef struct {
+typedef struct AST_Node {
     NodeType type;
     union {
         int number_value;

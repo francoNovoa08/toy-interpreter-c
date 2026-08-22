@@ -1,20 +1,34 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
-LIB_SRC = src/token.c src/utils/token_utils.c
-TEST_SRC = tests/test_token.c
+
+LIB_SRC = src/token.c src/utils/token_utils.c src/parser.c
+
 TARGET = interpreter
-TEST_TARGET = test_token
+
+TEST_TOKEN_SRC = tests/test_token.c
+TEST_TOKEN_TARGET = test_token
+
+TEST_PARSER_SRC = tests/test_parser.c
+TEST_PARSER_TARGET = test_parser
 
 $(TARGET): $(LIB_SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(LIB_SRC)
 
-$(TEST_TARGET): $(LIB_SRC) $(TEST_SRC)
-	$(CC) $(CFLAGS) -o $(TEST_TARGET) $(LIB_SRC) $(TEST_SRC)
+$(TEST_TOKEN_TARGET): $(LIB_SRC) $(TEST_TOKEN_SRC)
+	$(CC) $(CFLAGS) -o $(TEST_TOKEN_TARGET) $(LIB_SRC) $(TEST_TOKEN_SRC)
 
-test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+$(TEST_PARSER_TARGET): $(LIB_SRC) $(TEST_PARSER_SRC)
+	$(CC) $(CFLAGS) -o $(TEST_PARSER_TARGET) $(LIB_SRC) $(TEST_PARSER_SRC)
+
+test-token: $(TEST_TOKEN_TARGET)
+	./$(TEST_TOKEN_TARGET)
+
+test-parser: $(TEST_PARSER_TARGET)
+	./$(TEST_PARSER_TARGET)
+
+test: test-token test-parser
 
 clean:
-	rm -f $(TARGET) $(TEST_TARGET)
+	rm -f $(TARGET) $(TEST_TOKEN_TARGET) $(TEST_PARSER_TARGET)
 
-.PHONY: clean test
+.PHONY: clean test test-token test-parser
