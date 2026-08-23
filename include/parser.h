@@ -3,12 +3,13 @@
 
 #include "utils/AST.h"
 #include "token.h"
+#include "utils/errors.h"
 
 typedef struct {
   Token *tokens;
   size_t token_count;
   size_t pos;
-  char *error_message;
+  ErrorCode error;
 } ParserState;
 
 /**
