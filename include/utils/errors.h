@@ -7,8 +7,9 @@ typedef enum {
   PARSE_ERR_EXPECTED_NUMBER, // Cannot chain operators or start with non-number
   PARSE_ERR_EXPECTED_OPERATOR,    // Cannot chain operands together
   PARSE_ERR_SUBEXPRESSION_FAILED, // Unable to parse multiplicative.
-  EVALUATE_ERR_ZERO_DIVISION,      // Expression attempts to divide by zero.
-  EVALUATE_ERR_UNKNOWN_NODE // Invalid AST Node
+  PARSE_ERR_MISSING_BRACE,        // Missing left or right parenthesis
+  EVALUATE_ERR_ZERO_DIVISION,     // Expression attempts to divide by zero.
+  EVALUATE_ERR_UNKNOWN_NODE       // Invalid AST Node
 } ErrorCode;
 
 const char *get_parser_error_message(ErrorCode code);

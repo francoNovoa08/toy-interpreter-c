@@ -37,6 +37,18 @@ Token *tokenise_string(char *string, size_t *tokens) {
       token_count++;
       i++;
       continue;
+    case '(':
+      token.type = TOKEN_LEFT_BRACKET;
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
+    case ')':
+      token.type = TOKEN_RIGHT_BRACKET;
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
     default:
       token.type = TOKEN_NUMBER;
     }
@@ -44,8 +56,9 @@ Token *tokenise_string(char *string, size_t *tokens) {
     size_t next = i + 1;
     size_t counter = 1;
     size_t num = string[i] - '0';
-    while (next < len && string[next] != '+' && string[next] != '-' && string[next] != '*' &&
-           string[next] != '/') {
+    while (next < len && string[next] != '+' && string[next] != '-' &&
+           string[next] != '*' && string[next] != '/' && string[next] != '(' &&
+           string[next] != ')') {
       num *= 10;
       num += string[next] - '0';
       counter++;

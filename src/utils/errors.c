@@ -13,6 +13,8 @@ const char *get_parser_error_message(ErrorCode code) {
     return "Syntax Error: Expected an operator (+, -, *, /) between numbers.";
   case PARSE_ERR_SUBEXPRESSION_FAILED:
     return "Syntax Error: Failed to parse sub-expression.";
+  case PARSE_ERR_MISSING_BRACE:
+    return "Syntax Error: Missing an opening or closing brace.";
   case EVALUATE_ERR_ZERO_DIVISION:
     return "Syntax Error: Cannot divide by zero.";
   case EVALUATE_ERR_UNKNOWN_NODE:

@@ -33,4 +33,14 @@ AST_Node *parse_additive(ParserState *state);
  */
 AST_Node *parse_multiplicative(ParserState *state);
 
+/**
+ * @brief Parses a single unit, either a number or parenthesised expression
+ *
+ *
+ * @param state The shared state passed in.
+ *
+ * @return The built subtree.
+ */
+AST_Node *parse_primary(ParserState *state);
+
 #endif // PARSER_H

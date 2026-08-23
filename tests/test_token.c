@@ -5,11 +5,13 @@
 void test_simple_addition();
 void test_multi_digit_numbers();
 void test_whitespace();
+void test_parenthesis();
 
 int main() {
     test_simple_addition();
     test_multi_digit_numbers();
     test_whitespace();
+    test_parenthesis();
 
     printf("All token tests passed.\n");
     return 0;
@@ -53,4 +55,16 @@ void test_whitespace() {
     assert(tokens[2].type == TOKEN_TIMES);
     assert(tokens[3].type == TOKEN_OVER);
     printf("test_whitespace passed.\n");
+}
+
+void test_parenthesis() {
+    size_t count;
+    char input[] = "1(2)3";
+    Token *tokens = tokenise_string(input, &count);
+    assert(count == 5);
+    assert(tokens[1].type == TOKEN_LEFT_BRACKET);
+    assert(tokens[2].type == TOKEN_NUMBER);
+    assert(tokens[3].type == TOKEN_RIGHT_BRACKET);
+    assert(tokens[4].type == TOKEN_NUMBER);
+    printf("test_parenthesis passed.\n");
 }

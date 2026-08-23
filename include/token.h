@@ -8,6 +8,8 @@ typedef enum {
   TOKEN_MINUS,
   TOKEN_TIMES,
   TOKEN_OVER,
+  TOKEN_LEFT_BRACKET,
+  TOKEN_RIGHT_BRACKET,
 } TokenType;
 
 typedef struct {
