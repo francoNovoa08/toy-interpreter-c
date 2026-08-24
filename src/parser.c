@@ -1,5 +1,4 @@
 #include "parser.h"
-#include "utils/AST.h"
 #include <stdlib.h>
 
 AST_Node *parse_additive(ParserState *state) {

@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "utils/AST.h"
+#include "utils/data_structures/AST.h"
 #include "token.h"
 #include "utils/errors.h"
 

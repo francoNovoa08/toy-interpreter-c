@@ -1,7 +1,7 @@
 #ifndef EVALUATE_H
 #define EVALUATE_H
 
-#include "utils/AST.h"
+#include "utils/data_structures/AST.h"
 #include "utils/errors.h"
 typedef struct {
     int result;
