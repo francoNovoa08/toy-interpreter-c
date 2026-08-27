@@ -10,7 +10,9 @@ typedef enum {
   PARSE_ERR_MISSING_BRACE,             // Missing left or right parenthesis
   PARSE_ERR_INVALID_ASSIGNMENT_TARGET, // Cannot assign to literal/expression
   EVALUATE_ERR_ZERO_DIVISION,          // Expression attempts to divide by zero.
-  EVALUATE_ERR_UNKNOWN_NODE            // Invalid AST Node
+  EVALUATE_ERR_UNKNOWN_NODE,           // Invalid AST Node
+  EVALUATE_ERR_UNDEFINED_VARIABLE,     // A variable that doesn't exist is being
+                                       // accessed
 } ErrorCode;
 
 const char *get_parser_error_message(ErrorCode code);
