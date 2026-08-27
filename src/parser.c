@@ -29,13 +29,10 @@ AST_Node *parse_additive(ParserState *state) {
 
     if (state->pos < state->token_count) {
       current_token = tokens[state->pos];
-      if (current_token.type != TOKEN_NUMBER) {
-        state->error = PARSE_ERR_EXPECTED_NUMBER;
-        return NULL;
-      }
+
       AST_Node *new_node = parse_multiplicative(state);
       if (new_node == NULL) {
-        return NULL; 
+        return NULL;
       }
       current_token = tokens[state->pos];
 
@@ -107,6 +104,22 @@ AST_Node *parse_primary(ParserState *state) {
   }
 
   if (current_token.type != TOKEN_LEFT_BRACKET) {
+    if (current_token.type == TOKEN_ASSIGNMENT) {
+      state->error = PARSE_ERR_INVALID_ASSIGNMENT_TARGET;
+      return NULL;
+    }
+
+    if (current_token.type == TOKEN_IDENTIFIER) {
+      AST_Node *variable = AST_build_node_from_token(current_token);
+      state->pos++;
+      if (variable == NULL) {
+        state->error = PARSE_ERR_MEMORY_ALLOCATION;
+        return NULL;
+      }
+
+      return variable;
+    }
+
     if (current_token.type != TOKEN_NUMBER) {
       state->error = PARSE_ERR_EXPECTED_NUMBER;
       return NULL;
@@ -126,12 +139,13 @@ AST_Node *parse_primary(ParserState *state) {
   }
 
   current_token = tokens[state->pos];
-  if (current_token.type != TOKEN_NUMBER) {
-    state->error = PARSE_ERR_EXPECTED_NUMBER;
+
+  AST_Node *inner = parse_additive(state);
+
+  if (inner == NULL) {
     return NULL;
   }
 
-  AST_Node *inner = parse_additive(state);
   if (state->pos == state->token_count) {
     state->error = PARSE_ERR_MISSING_BRACE;
     return NULL;
@@ -144,4 +158,44 @@ AST_Node *parse_primary(ParserState *state) {
   }
 
   return inner;
+}
+
+AST_Node *parse_statement(ParserState *state) {
+  Token *tokens = state->tokens;
+  Token current_token = tokens[state->pos];
+
+  if (state->pos == state->token_count - 1) {
+    return AST_build_node_from_token(current_token);
+  }
+
+  if (current_token.type != TOKEN_IDENTIFIER &&
+      tokens[state->pos + 1].type == TOKEN_ASSIGNMENT) {
+    state->error = PARSE_ERR_INVALID_ASSIGNMENT_TARGET;
+    return NULL;
+  }
+
+  if (!(current_token.type == TOKEN_IDENTIFIER &&
+        tokens[state->pos + 1].type == TOKEN_ASSIGNMENT)) {
+    return parse_additive(state);
+  }
+
+  AST_Node *variable = AST_build_node_from_token(current_token);
+  if (variable == NULL) {
+    state->error = PARSE_ERR_MEMORY_ALLOCATION;
+  }
+  state->pos++;
+  current_token = tokens[state->pos];
+  AST_Node *assign = AST_build_node_from_token(current_token);
+  if (assign == NULL) {
+    state->error = PARSE_ERR_MEMORY_ALLOCATION;
+  }
+  state->pos++;
+
+  assign->left = variable;
+  AST_Node *right = parse_additive(state);
+  if (right == NULL) {
+    return NULL;
+  }
+  assign->right = right;
+  return assign;
 }

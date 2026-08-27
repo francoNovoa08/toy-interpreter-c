@@ -1,48 +1,29 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 #define INITIAL_CAPACITY 8
 #define LOAD_FACTOR_THRESHOLD 0.75
 
 typedef struct HashNode {
-    char *key;
-    int value;
-    struct HashNode *next;
+  char *key;
+  int value;
+  struct HashNode *next;
 } HashNode;
 
 typedef struct {
-    HashNode **buckets;
-    size_t capacity;
-    size_t size;
+  HashNode **buckets;
+  size_t capacity;
+  size_t size;
 } HashMap;
-
-/**
- * @brief Hashing function for the HashMap
- *
- * @param key A pointer to the key to the hash
- * @param capacity The current capacity of the HashMap
- *
- * @return The hashed key
- */
-static unsigned int hash_function(const char *key, size_t capacity);
 
 /**
  * @brief Creates a HashMap
  *
  * @return A pointer to the created HashMap
  */
-HashMap* HashMap_create();
-
-/**
- * @brief Resizes the HashMap
- *
- * @param map The Hashmap
- *
- * @return True on success, else false
- */
-static bool HashMap_resize(HashMap *map);
+HashMap *HashMap_create();
 
 /**
  * @brief Inserts a key and value into the HashMap

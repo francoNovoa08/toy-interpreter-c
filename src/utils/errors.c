@@ -15,6 +15,8 @@ const char *get_parser_error_message(ErrorCode code) {
     return "Syntax Error: Failed to parse sub-expression.";
   case PARSE_ERR_MISSING_BRACE:
     return "Syntax Error: Missing an opening or closing brace.";
+  case PARSE_ERR_INVALID_ASSIGNMENT_TARGET:
+    return "Syntax Error: Cannot assign target";
   case EVALUATE_ERR_ZERO_DIVISION:
     return "Syntax Error: Cannot divide by zero.";
   case EVALUATE_ERR_UNKNOWN_NODE:

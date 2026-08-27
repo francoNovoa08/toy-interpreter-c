@@ -10,10 +10,18 @@ typedef enum {
   TOKEN_OVER,
   TOKEN_LEFT_BRACKET,
   TOKEN_RIGHT_BRACKET,
+  TOKEN_IDENTIFIER,
+  TOKEN_ASSIGNMENT,
 } TokenType;
 
 typedef struct {
-  size_t value;
+  union {
+    int number_value;
+    struct {
+      const char *start;
+      size_t length;
+    } identifier;
+  } value;
   TokenType type;
 } Token;
 

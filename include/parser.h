@@ -43,4 +43,14 @@ AST_Node *parse_multiplicative(ParserState *state);
  */
 AST_Node *parse_primary(ParserState *state);
 
+/**
+ * @brief Parses a statement including assignment and an expression
+ *
+ *
+ * @param state The shared state passed in.
+ *
+ * @return The built subtree.
+ */
+AST_Node *parse_statement(ParserState *state);
+
 #endif // PARSER_H

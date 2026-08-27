@@ -1,4 +1,4 @@
-#include "utils/AST.h"
+#include "utils/data_structures/AST.h"
 #include <stdlib.h>
 
 AST_Node *AST_build_node_from_token(Token token) {
@@ -6,7 +6,7 @@ AST_Node *AST_build_node_from_token(Token token) {
   switch (token.type) {
   case TOKEN_NUMBER:
     new_node->type = NODE_NUMBER;
-    new_node->data.number_value = token.value;
+    new_node->data.number_value = token.value.number_value;
     break;
   case TOKEN_TIMES:
     new_node->type = NODE_TIMES;
@@ -19,6 +19,14 @@ AST_Node *AST_build_node_from_token(Token token) {
     break;
   case TOKEN_MINUS:
     new_node->type = NODE_MINUS;
+    break;
+  case TOKEN_IDENTIFIER:
+    new_node->type = NODE_VARIABLE;
+    new_node->data.identifier.length = token.value.identifier.length;
+    new_node->data.identifier.start = token.value.identifier.start;
+    break;
+  case TOKEN_ASSIGNMENT:
+    new_node->type = NODE_ASSIGN;
     break;
   default:
     return NULL;

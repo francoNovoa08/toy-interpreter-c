@@ -1,5 +1,6 @@
 #include "token.h"
 #include "utils/token_utils.h"
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -49,23 +50,43 @@ Token *tokenise_string(char *string, size_t *tokens) {
       token_count++;
       i++;
       continue;
-    default:
-      token.type = TOKEN_NUMBER;
+    case '=':
+      token.type = TOKEN_ASSIGNMENT;
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
     }
 
     size_t next = i + 1;
     size_t counter = 1;
-    size_t num = string[i] - '0';
-    while (next < len && string[next] != '+' && string[next] != '-' &&
-           string[next] != '*' && string[next] != '/' && string[next] != '(' &&
-           string[next] != ')') {
-      num *= 10;
-      num += string[next] - '0';
+
+    if (isdigit((unsigned char)string[i])) {
+      token.type = TOKEN_NUMBER;
+      size_t num = string[i] - '0';
+      while (next < len && !strchr("+-*/()=", string[next])) {
+        num *= 10;
+        num += string[next] - '0';
+        counter++;
+        next++;
+      }
+
+      token.value.number_value = num;
+      token_array[token_count] = token;
+      token_count++;
+      i += counter;
+      continue;
+    }
+
+    token.type = TOKEN_IDENTIFIER;
+    while (next < len && (isalnum(string[next]) || string[next] == '_')) {
       counter++;
       next++;
     }
 
-    token.value = num;
+    token.value.identifier.start = &string[i];
+    token.value.identifier.length = counter;
+
     token_array[token_count] = token;
     token_count++;
     i += counter;

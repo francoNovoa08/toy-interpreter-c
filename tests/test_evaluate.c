@@ -76,7 +76,7 @@ void test_division_by_zero() {
 
   ParserState *state = malloc(sizeof(ParserState));
   state->tokens = tokens;
-  state->token_count = 7;
+  state->token_count = 3;
   state->pos = 0;
 
   AST_Node *node = parse_additive(state);
