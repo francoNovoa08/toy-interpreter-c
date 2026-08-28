@@ -51,7 +51,25 @@ Token *tokenise_string(char *string, size_t *tokens) {
       i++;
       continue;
     case '=':
-      token.type = TOKEN_ASSIGNMENT;
+      if (i == len || string[i + 1] != '=') {
+        token.type = TOKEN_ASSIGNMENT;
+      } else {
+        token.type = TOKEN_EQUALS;
+        i++;
+      }
+      
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
+    case '<':
+      token.type = TOKEN_LESS_THAN;
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
+    case '>':
+      token.type = TOKEN_GREATER_THAN;
       token_array[token_count] = token;
       token_count++;
       i++;
@@ -64,7 +82,7 @@ Token *tokenise_string(char *string, size_t *tokens) {
     if (isdigit((unsigned char)string[i])) {
       token.type = TOKEN_NUMBER;
       size_t num = string[i] - '0';
-      while (next < len && !strchr("+-*/()=", string[next])) {
+      while (next < len && isdigit((unsigned char)string[next])) {
         num *= 10;
         num += string[next] - '0';
         counter++;

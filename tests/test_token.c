@@ -8,6 +8,7 @@ void test_whitespace();
 void test_parenthesis();
 void test_assignment();
 void test_multi_character_identifier();
+void test_conditionals();
 
 int main() {
   test_simple_addition();
@@ -101,4 +102,22 @@ void test_multi_character_identifier() {
   assert(tokens[2].type == TOKEN_NUMBER);
 
   printf("test_multi_character_identifier passed.\n");
+}
+
+void test_conditionals() {
+  size_t count;
+  char input[] = "2==5<1>";
+  Token *tokens = tokenise_string(input, &count);
+
+  assert(count == 6);
+  assert(tokens[0].type == TOKEN_NUMBER);
+  assert(tokens[1].type == TOKEN_EQUALS);
+  assert(tokens[2].type == TOKEN_NUMBER);
+  assert(tokens[2].value.number_value == 5);
+  assert(tokens[3].type == TOKEN_LESS_THAN);
+  assert(tokens[4].type == TOKEN_NUMBER);
+  assert(tokens[4].value.number_value == 1);
+  assert(tokens[5].type == TOKEN_GREATER_THAN);
+
+  printf("test_conditionals passed.\n");
 }

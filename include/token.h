@@ -12,6 +12,9 @@ typedef enum {
   TOKEN_RIGHT_BRACKET,
   TOKEN_IDENTIFIER,
   TOKEN_ASSIGNMENT,
+  TOKEN_GREATER_THAN,
+  TOKEN_LESS_THAN,
+  TOKEN_EQUALS,
 } TokenType;
 
 typedef struct {
