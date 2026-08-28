@@ -2,7 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude -g
 
 LIB_SRC = src/token.c src/utils/token_utils.c src/parser.c src/utils/data_structures/AST.c \
-	      src/evaluate.c src/utils/errors.c src/utils/data_structures/hashmap.c
+	      src/evaluate.c src/utils/errors.c src/utils/data_structures/hashmap.c \
+		  src/utils/evaluate_utils.c src/utils/data_structures/symbol_table.c
 
 TARGET = interpreter
 

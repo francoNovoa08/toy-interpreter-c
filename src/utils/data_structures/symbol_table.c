@@ -1,4 +1,4 @@
-#include "utils/symbol_table.h"
+#include "utils/data_structures/symbol_table.h"
 #include "utils/data_structures/hashmap.h"
 
 SymbolTable *SymbolTable_create() { return HashMap_create(); }

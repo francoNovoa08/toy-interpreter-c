@@ -126,6 +126,7 @@ void test_variable_persistence() {
   assert(result2.result == 8);
   assert(SymbolTable_get(table, "x", &out_value) == true);
   assert(out_value == 5);
+  assert(result.result == 5);
 
   printf("test_variable_persistence passed.\n");
   free_state(state);

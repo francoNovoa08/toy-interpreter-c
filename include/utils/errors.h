@@ -13,6 +13,7 @@ typedef enum {
   EVALUATE_ERR_UNKNOWN_NODE,           // Invalid AST Node
   EVALUATE_ERR_UNDEFINED_VARIABLE,     // A variable that doesn't exist is being
                                        // accessed
+  EVALUATE_ERR_MEMORY_ALLOCATION // Unable to build variable name from ndoe
 } ErrorCode;
 
 const char *get_parser_error_message(ErrorCode code);
