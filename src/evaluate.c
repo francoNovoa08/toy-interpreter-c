@@ -49,6 +49,26 @@ EvaluationResult evaluate(AST_Node *tree, SymbolTable *table) {
   if (left_result.error != SUCCESS)
     return left_result;
 
+  if (tree->type == NODE_STATEMENT_LIST) {
+    if (tree->right != NULL) {
+      EvaluationResult right_result = evaluate(tree->right, table);
+      return right_result;
+    }
+
+    return left_result;
+  }
+
+  if (tree->type == NODE_IF) {
+    if (left_result.result == 0) {
+      result.result = 0;
+      result.error = SUCCESS;
+      return result;
+    }
+
+    EvaluationResult right_result = evaluate(tree->right, table);
+    return right_result;
+  }
+
   EvaluationResult right_result = evaluate(tree->right, table);
   if (right_result.error != SUCCESS)
     return right_result;
@@ -74,9 +94,35 @@ EvaluationResult evaluate(AST_Node *tree, SymbolTable *table) {
       result.error = SUCCESS;
     }
     return result;
+  case NODE_GREATER_THAN:
+    result.result = left_result.result > right_result.result;
+    result.error = SUCCESS;
+    return result;
+  case NODE_LESS_THAN:
+    result.result = left_result.result < right_result.result;
+    result.error = SUCCESS;
+    return result;
+  case NODE_EQUALS:
+    result.result = left_result.result == right_result.result;
+    result.error = SUCCESS;
+    return result;
+  case NODE_GREATER_THAN_OR_EQUAL:
+    result.result = left_result.result >= right_result.result;
+    result.error = SUCCESS;
+    return result;
+  case NODE_LESS_THAN_OR_EQUAL:
+    result.result = left_result.result <= right_result.result;
+    result.error = SUCCESS;
+    return result;
+  case NODE_NOT_EQUAL:
+    result.result = left_result.result != right_result.result;
+    result.error = SUCCESS;
+    return result;
   default:
     result.error = EVALUATE_ERR_UNKNOWN_NODE;
     result.result = 0;
     return result;
+
+    break;
   }
 }
