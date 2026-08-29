@@ -8,7 +8,9 @@ void test_whitespace();
 void test_parenthesis();
 void test_assignment();
 void test_multi_character_identifier();
-void test_conditionals();
+void test_conditional_operators();
+void test_multichar_conditional_operators();
+void test_if_statement();
 
 int main() {
   test_simple_addition();
@@ -17,6 +19,9 @@ int main() {
   test_parenthesis();
   test_assignment();
   test_multi_character_identifier();
+  test_conditional_operators();
+  test_multichar_conditional_operators();
+  test_if_statement();
 
   printf("All token tests passed.\n");
   return 0;
@@ -104,7 +109,7 @@ void test_multi_character_identifier() {
   printf("test_multi_character_identifier passed.\n");
 }
 
-void test_conditionals() {
+void test_conditional_operators() {
   size_t count;
   char input[] = "2==5<1>";
   Token *tokens = tokenise_string(input, &count);
@@ -119,5 +124,43 @@ void test_conditionals() {
   assert(tokens[4].value.number_value == 1);
   assert(tokens[5].type == TOKEN_GREATER_THAN);
 
-  printf("test_conditionals passed.\n");
+  printf("test_conditional_operators passed.\n");
+}
+
+void test_multichar_conditional_operators() {
+  size_t count;
+  char input[] = "<=2>=3!=4";
+  Token *tokens = tokenise_string(input, &count);
+
+  assert(count == 6);
+  assert(tokens[0].type == TOKEN_LESS_THAN_OR_EQUAL);
+  assert(tokens[1].type == TOKEN_NUMBER);
+  assert(tokens[2].type == TOKEN_GREATER_THAN_OR_EQUAL);
+  assert(tokens[3].type == TOKEN_NUMBER);
+  assert(tokens[4].type == TOKEN_NOT_EQUAL);
+  assert(tokens[5].type == TOKEN_NUMBER);
+  assert(tokens[5].value.number_value == 4);
+
+  printf("test_multichar_conditional_operators passed.\n");
+}
+
+void test_if_statement() {
+  size_t count;
+  char input[] = "if (x > 2) {x=2}";
+  Token *tokens = tokenise_string(input, &count);
+
+  assert(count == 11);
+  assert(tokens[0].type == TOKEN_IF);
+  assert(tokens[1].type == TOKEN_LEFT_BRACKET);
+  assert(tokens[2].type == TOKEN_IDENTIFIER);
+  assert(tokens[3].type == TOKEN_GREATER_THAN);
+  assert(tokens[4].type == TOKEN_NUMBER);
+  assert(tokens[5].type == TOKEN_RIGHT_BRACKET);
+  assert(tokens[6].type == TOKEN_CURLY_LEFT_BRACKET);
+  assert(tokens[7].type == TOKEN_IDENTIFIER);
+  assert(tokens[8].type == TOKEN_ASSIGNMENT);
+  assert(tokens[9].type == TOKEN_NUMBER);
+  assert(tokens[10].type == TOKEN_CURLY_RIGHT_BRACKET);
+
+  printf("test_if_statement passed.\n");
 }

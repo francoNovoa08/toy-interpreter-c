@@ -28,6 +28,27 @@ AST_Node *AST_build_node_from_token(Token token) {
   case TOKEN_ASSIGNMENT:
     new_node->type = NODE_ASSIGN;
     break;
+  case TOKEN_GREATER_THAN:
+    new_node->type = NODE_GREATER_THAN;
+    break;
+  case TOKEN_LESS_THAN:
+    new_node->type = NODE_LESS_THAN;
+    break;
+  case TOKEN_EQUALS:
+    new_node->type = NODE_EQUALS;
+    break;
+  case TOKEN_GREATER_THAN_OR_EQUAL:
+    new_node->type = NODE_GREATER_THAN_OR_EQUAL;
+    break;
+  case TOKEN_LESS_THAN_OR_EQUAL:
+    new_node->type = NODE_LESS_THAN_OR_EQUAL;
+    break;
+  case TOKEN_NOT_EQUAL:
+    new_node->type = NODE_NOT_EQUAL;
+    break;
+  case TOKEN_IF:
+    new_node->type = NODE_IF;
+    break;
   default:
     return NULL;
   }

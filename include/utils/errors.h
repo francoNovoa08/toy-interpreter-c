@@ -9,11 +9,12 @@ typedef enum {
   PARSE_ERR_SUBEXPRESSION_FAILED,      // Unable to parse multiplicative.
   PARSE_ERR_MISSING_BRACE,             // Missing left or right parenthesis
   PARSE_ERR_INVALID_ASSIGNMENT_TARGET, // Cannot assign to literal/expression
+  PARSE_ERR_MISSING_CURLY_BRACE,       // Missing left or right curly brace
   EVALUATE_ERR_ZERO_DIVISION,          // Expression attempts to divide by zero.
   EVALUATE_ERR_UNKNOWN_NODE,           // Invalid AST Node
   EVALUATE_ERR_UNDEFINED_VARIABLE,     // A variable that doesn't exist is being
                                        // accessed
-  EVALUATE_ERR_MEMORY_ALLOCATION // Unable to build variable name from ndoe
+  EVALUATE_ERR_MEMORY_ALLOCATION, // Unable to build variable name from ndoe
 } ErrorCode;
 
 const char *get_parser_error_message(ErrorCode code);

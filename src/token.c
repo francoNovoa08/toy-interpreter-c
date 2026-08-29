@@ -57,19 +57,48 @@ Token *tokenise_string(char *string, size_t *tokens) {
         token.type = TOKEN_EQUALS;
         i++;
       }
-      
+
       token_array[token_count] = token;
       token_count++;
       i++;
       continue;
     case '<':
-      token.type = TOKEN_LESS_THAN;
+      if (i == len || string[i + 1] != '=') {
+        token.type = TOKEN_LESS_THAN;
+      } else {
+        token.type = TOKEN_LESS_THAN_OR_EQUAL;
+        i++;
+      }
       token_array[token_count] = token;
       token_count++;
       i++;
       continue;
     case '>':
-      token.type = TOKEN_GREATER_THAN;
+      if (i + 1 == len || string[i + 1] != '=') {
+        token.type = TOKEN_GREATER_THAN;
+      } else {
+        token.type = TOKEN_GREATER_THAN_OR_EQUAL;
+        i++;
+      }
+
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
+    case '!':
+      token.type = TOKEN_NOT_EQUAL;
+      token_array[token_count] = token;
+      token_count++;
+      i += 2;
+      continue;
+    case '{':
+      token.type = TOKEN_CURLY_LEFT_BRACKET;
+      token_array[token_count] = token;
+      token_count++;
+      i++;
+      continue;
+    case '}':
+      token.type = TOKEN_CURLY_RIGHT_BRACKET;
       token_array[token_count] = token;
       token_count++;
       i++;
@@ -96,14 +125,18 @@ Token *tokenise_string(char *string, size_t *tokens) {
       continue;
     }
 
-    token.type = TOKEN_IDENTIFIER;
     while (next < len && (isalnum(string[next]) || string[next] == '_')) {
       counter++;
       next++;
     }
 
-    token.value.identifier.start = &string[i];
-    token.value.identifier.length = counter;
+    if (is_if_keyword(&string[i], counter)) {
+      token.type = TOKEN_IF;
+    } else {
+      token.type = TOKEN_IDENTIFIER;
+      token.value.identifier.start = &string[i];
+      token.value.identifier.length = counter;
+    }
 
     token_array[token_count] = token;
     token_count++;

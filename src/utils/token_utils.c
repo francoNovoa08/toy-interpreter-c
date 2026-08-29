@@ -1,6 +1,7 @@
 #include "utils/token_utils.h"
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 void remove_all_whitespace(char *string) {
   if (string == NULL) {
@@ -18,4 +19,8 @@ void remove_all_whitespace(char *string) {
     read_ptr++;
   }
   *write_ptr = '\0';
+}
+
+bool is_if_keyword(const char* start, size_t length) {
+  return (length == 2) && (strncmp(start, "if", 2) == 0);
 }

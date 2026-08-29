@@ -174,9 +174,13 @@ AST_Node *parse_statement(ParserState *state) {
     return NULL;
   }
 
+  if (current_token.type == TOKEN_IF) {
+    return parse_if(state);
+  }
+
   if (!(current_token.type == TOKEN_IDENTIFIER &&
         tokens[state->pos + 1].type == TOKEN_ASSIGNMENT)) {
-    return parse_additive(state);
+    return parse_comparison(state);
   }
 
   AST_Node *variable = AST_build_node_from_token(current_token);
@@ -192,10 +196,104 @@ AST_Node *parse_statement(ParserState *state) {
   state->pos++;
 
   assign->left = variable;
-  AST_Node *right = parse_additive(state);
+  AST_Node *right = parse_comparison(state);
   if (right == NULL) {
     return NULL;
   }
   assign->right = right;
   return assign;
+}
+
+AST_Node *parse_comparison(ParserState *state) {
+  AST_Node *tree_left = parse_additive(state);
+  if (tree_left == NULL) {
+    return NULL;
+  }
+
+  Token *tokens = state->tokens;
+  Token current_token = tokens[state->pos];
+  if (current_token.type != TOKEN_EQUALS &&
+      current_token.type != TOKEN_GREATER_THAN &&
+      current_token.type != TOKEN_GREATER_THAN_OR_EQUAL &&
+      current_token.type != TOKEN_LESS_THAN &&
+      current_token.type != TOKEN_LESS_THAN_OR_EQUAL &&
+      current_token.type != TOKEN_NOT_EQUAL) {
+    return tree_left;
+  }
+
+  AST_Node *comparison_node = AST_build_node_from_token(current_token);
+  state->pos++;
+  current_token = tokens[state->pos];
+  AST_Node *tree_right = parse_additive(state);
+  if (tree_right == NULL) {
+    return NULL;
+  }
+
+  comparison_node->left = tree_left;
+  comparison_node->right = tree_right;
+  return comparison_node;
+}
+
+AST_Node *parse_if(ParserState *state) {
+  Token *tokens = state->tokens;
+  AST_Node *if_node = AST_build_node_from_token(tokens[state->pos]);
+  state->pos++;
+  if (state->pos == state->token_count ||
+      tokens[state->pos].type != TOKEN_LEFT_BRACKET) {
+    state->error = PARSE_ERR_MISSING_BRACE;
+    return NULL;
+  }
+
+  state->pos++;
+  AST_Node *comparison = parse_comparison(state);
+  if (comparison == NULL) {
+    return NULL;
+  }
+  if_node->left = comparison;
+
+  Token current_token = tokens[state->pos];
+  if (current_token.type != TOKEN_RIGHT_BRACKET) {
+    state->error = PARSE_ERR_MISSING_BRACE;
+    return NULL;
+  }
+
+  state->pos++;
+  current_token = tokens[state->pos];
+  if (current_token.type != TOKEN_CURLY_LEFT_BRACKET) {
+    state->error = PARSE_ERR_MISSING_CURLY_BRACE;
+    return NULL;
+  }
+
+  state->pos++;
+  current_token = tokens[state->pos];
+
+  AST_Node *head = malloc(sizeof(AST_Node));
+  head->type = NODE_STATEMENT_LIST;
+  AST_Node *current_node = head;
+  while (current_token.type != TOKEN_CURLY_RIGHT_BRACKET &&
+         state->pos < state->token_count) {
+    AST_Node *left = parse_statement(state);
+    current_node->left = left;
+    current_token = tokens[state->pos];
+    if (left == NULL) {
+      return NULL;
+    }
+
+    if (current_token.type != TOKEN_CURLY_RIGHT_BRACKET) {
+      AST_Node *right = malloc(sizeof(AST_Node));
+      if (right == NULL) {
+        state->error = PARSE_ERR_MEMORY_ALLOCATION;
+        return NULL;
+      }
+      current_node->right = right;
+      current_node = current_node->right;
+    }
+
+    current_node->right = NULL;
+    current_node->type = NODE_STATEMENT_LIST;
+  }
+  state->pos++;
+  if_node->right = head;
+
+  return if_node;
 }

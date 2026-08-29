@@ -6,49 +6,65 @@
 #include <stdlib.h>
 
 // Tests
+// parse_multiplicative_tests
 void test_multiplicative_single_operator();
 void test_multiplicative_multiple_operands();
 void test_multiplicative_malformed_operands();
 void test_multiplicative_single_operand();
 void test_multiplicative_no_relevant_operands();
 
+// parse_additive tests
 void test_additive_single_operator();
 void test_additive_multiple_operands();
 void test_additive_single_operand();
 void test_additive_no_relevant_operators();
 
+// Parenthesis tests
 void test_parenthesised_expression();
 void test_invalid_parenthesis();
 
+// Assignment and statement tests
 void test_statement_assignment();
 void test_statement_invalid_assignment();
 void test_statement_multiple_identifiers();
 void test_statement_parenthesised_identifier();
 
+// Conditionals test
+void test_simple_comparison();
+void test_comparison_equality();
+void test_comparison_non_looping();
+void test_comparison_with_variables();
+void test_comparison_flow();
+void test_if_block();
+
 int main() {
   setbuf(stdout, NULL);
-  // parse_multiplicative_tests
+
   test_multiplicative_single_operator();
   test_multiplicative_multiple_operands();
   test_multiplicative_malformed_operands();
   test_multiplicative_single_operand();
   test_multiplicative_no_relevant_operands();
 
-  // parse_additive tests
   test_additive_single_operator();
   test_additive_multiple_operands();
   test_additive_single_operand();
   test_additive_no_relevant_operators();
 
-  // Parenthesis tests
   test_parenthesised_expression();
   test_invalid_parenthesis();
 
-  // Assignment and statement tests
   test_statement_assignment();
   test_statement_invalid_assignment();
   test_statement_multiple_identifiers();
   test_statement_parenthesised_identifier();
+
+  test_simple_comparison();
+  test_comparison_equality();
+  test_comparison_non_looping();
+  test_comparison_with_variables();
+  test_comparison_flow();
+  test_if_block();
 
   printf("All parser tests passed.\n");
   return 0;
@@ -352,5 +368,123 @@ void test_statement_parenthesised_identifier() {
   assert(node->right->right->right->type == NODE_VARIABLE);
 
   printf("test_statement_parenthesised_identifier passed.\n");
+  free_state(state);
+}
+
+void test_simple_comparison() {
+  // Arrange
+  char input[] = "1<2";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_comparison(state);
+
+  // Assert
+  assert(node->type == NODE_LESS_THAN);
+  assert(node->left->data.number_value == 1);
+  assert(node->right->data.number_value == 2);
+
+  printf("test_simple_comparison passed.\n");
+  free_state(state);
+}
+
+void test_comparison_equality() {
+  // Arrange
+  char input[] = "2==2";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_comparison(state);
+
+  // Assert
+  assert(node->type == NODE_EQUALS);
+  assert(node->left->data.number_value == 2);
+  assert(node->right->data.number_value == 2);
+
+  printf("test_comparison_equality passed.\n");
+  free_state(state);
+}
+
+void test_comparison_non_looping() {
+  // Arrange
+  char input[] = "3>2>1";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_comparison(state);
+
+  // Assert
+  assert(node->type == NODE_GREATER_THAN);
+  assert(node->left->data.number_value == 3);
+  assert(node->right->data.number_value == 2);
+
+  printf("test_comparison_non_looping passed.\n");
+  free_state(state);
+}
+
+void test_comparison_with_variables() {
+  // Arrange
+  char input[] = "x != 2";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_comparison(state);
+
+  // Assert
+  assert(node->type == NODE_NOT_EQUAL);
+  assert(node->left->type == NODE_VARIABLE);
+  assert(node->right->type == NODE_NUMBER);
+
+  printf("test_comparison_with_variables passed.\n");
+  free_state(state);
+}
+
+void test_comparison_flow() {
+  // Arrange
+  char input[] = "x + 2 >= y * 3";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_statement(state);
+
+  // Assert
+  assert(node->type == NODE_GREATER_THAN_OR_EQUAL);
+  assert(node->left->type == NODE_PLUS);
+  assert(node->left->left->type == NODE_VARIABLE);
+  assert(node->left->right->type == NODE_NUMBER);
+  assert(node->left->right->data.number_value == 2);
+  assert(node->right->type == NODE_TIMES);
+  assert(node->right->left->type == NODE_VARIABLE);
+  assert(node->right->right->type == NODE_NUMBER);
+  assert(node->right->right->data.number_value == 3);
+
+  printf("test_comparison_flow passed.\n");
+  free_state(state);
+}
+
+void test_if_block() {
+  // Arrange
+  char input[] = "if (x > 0) {y = 1 z = 2}";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_if(state);
+
+  // Assert
+  assert(node->type == NODE_IF);
+  assert(node->left->type == NODE_GREATER_THAN);
+  assert(node->left->left->type == NODE_VARIABLE);
+  assert(node->left->right->type == NODE_NUMBER);
+  assert(node->right->type == NODE_STATEMENT_LIST);
+  assert(node->right->left->type == NODE_ASSIGN);
+  assert(node->right->left->left->type == NODE_VARIABLE);
+  assert(node->right->left->right->type == NODE_NUMBER);
+  assert(node->right->right->type == NODE_STATEMENT_LIST);
+  assert(node->right->right->left->type == NODE_ASSIGN);
+  assert(node->right->right->left->left->type == NODE_VARIABLE);
+  assert(node->right->right->left->right->type == NODE_NUMBER);
+  assert(node->right->right->right == NULL);
+
+  printf("test_if_block passed.\n");
   free_state(state);
 }
