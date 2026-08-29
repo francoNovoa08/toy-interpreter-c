@@ -63,14 +63,4 @@ AST_Node *parse_statement(ParserState *state);
  */
 AST_Node *parse_comparison(ParserState *state);
 
-/**
- * @brief Parses an if block
- *
- *
- * @param state The shared state passed in.
- *
- * @return The built subtree.
- */
-AST_Node *parse_if(ParserState *state);
-
 #endif // PARSER_H

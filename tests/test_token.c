@@ -11,6 +11,7 @@ void test_multi_character_identifier();
 void test_conditional_operators();
 void test_multichar_conditional_operators();
 void test_if_statement();
+void test_while_loop();
 
 int main() {
   test_simple_addition();
@@ -22,6 +23,7 @@ int main() {
   test_conditional_operators();
   test_multichar_conditional_operators();
   test_if_statement();
+  test_while_loop();
 
   printf("All token tests passed.\n");
   return 0;
@@ -163,4 +165,26 @@ void test_if_statement() {
   assert(tokens[10].type == TOKEN_CURLY_RIGHT_BRACKET);
 
   printf("test_if_statement passed.\n");
+}
+
+void test_while_loop() {
+  size_t count;
+  char input[] = "while (x < 10) {2 + 2}";
+  Token *tokens = tokenise_string(input, &count);
+
+  assert(count == 11);
+  assert(tokens[0].type == TOKEN_WHILE);
+  assert(tokens[1].type == TOKEN_LEFT_BRACKET);
+  assert(tokens[2].type == TOKEN_IDENTIFIER);
+  assert(tokens[3].type == TOKEN_LESS_THAN);
+  assert(tokens[4].type == TOKEN_NUMBER);
+  assert(tokens[4].value.number_value == 10);
+  assert(tokens[5].type == TOKEN_RIGHT_BRACKET);
+  assert(tokens[6].type == TOKEN_CURLY_LEFT_BRACKET);
+  assert(tokens[7].type == TOKEN_NUMBER);
+  assert(tokens[8].type == TOKEN_PLUS);
+  assert(tokens[9].type == TOKEN_NUMBER);
+  assert(tokens[10].type == TOKEN_CURLY_RIGHT_BRACKET);
+
+  printf("test_while_loop passed.\n");
 }

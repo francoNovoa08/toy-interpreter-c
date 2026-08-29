@@ -24,3 +24,7 @@ void remove_all_whitespace(char *string) {
 bool is_if_keyword(const char* start, size_t length) {
   return (length == 2) && (strncmp(start, "if", 2) == 0);
 }
+
+bool is_while_keyword(const char* start, size_t length) {
+  return (length == 5) && (strncmp(start, "while", 5) ==0);
+}

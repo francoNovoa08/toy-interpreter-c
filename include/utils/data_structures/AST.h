@@ -18,6 +18,7 @@ typedef enum {
   NODE_NOT_EQUAL,
   NODE_STATEMENT_LIST,
   NODE_IF,
+  NODE_WHILE,
 } NodeType;
 
 typedef struct AST_Node {

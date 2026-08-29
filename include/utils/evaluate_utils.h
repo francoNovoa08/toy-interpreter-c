@@ -1,6 +1,8 @@
 #ifndef EVALUATE_UTILS_H
 #define EVALUATE_UTILS_H
 
+#include <stddef.h>
+
 /**
  * @brief Gets the name of a variable from a starting pointer and length
  *
@@ -9,7 +11,6 @@
  *
  * @return The variable name as a string
  */
-#include <stddef.h>
 char* get_variable_name(const char *start, size_t length);
 
 #endif // EVALUATE_UTILS_H

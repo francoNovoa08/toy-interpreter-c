@@ -21,6 +21,7 @@ typedef enum {
   TOKEN_IF,
   TOKEN_CURLY_LEFT_BRACKET,
   TOKEN_CURLY_RIGHT_BRACKET,
+  TOKEN_WHILE,
 } TokenType;
 
 typedef struct {

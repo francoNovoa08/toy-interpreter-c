@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "test_utils.c"
 #include "token.h"
+#include "utils/parser_utils.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,13 +30,16 @@ void test_statement_invalid_assignment();
 void test_statement_multiple_identifiers();
 void test_statement_parenthesised_identifier();
 
-// Conditionals test
+// Conditionals tests
 void test_simple_comparison();
 void test_comparison_equality();
 void test_comparison_non_looping();
 void test_comparison_with_variables();
 void test_comparison_flow();
 void test_if_block();
+
+// While loop tests
+void test_while_block();
 
 int main() {
   setbuf(stdout, NULL);
@@ -468,7 +472,7 @@ void test_if_block() {
   ParserState *state = make_state_from_input(input);
 
   // Act
-  AST_Node *node = parse_if(state);
+  AST_Node *node = parse_conditional_block(state);
 
   // Assert
   assert(node->type == NODE_IF);
@@ -486,5 +490,32 @@ void test_if_block() {
   assert(node->right->right->right == NULL);
 
   printf("test_if_block passed.\n");
+  free_state(state);
+}
+
+void test_while_block() {
+  // Arrange
+  char input[] = "while (x > 0) {y - 1 z - 2}";
+  ParserState *state = make_state_from_input(input);
+
+  // Act
+  AST_Node *node = parse_conditional_block(state);
+
+  // Assert
+  assert(node->type == NODE_WHILE);
+  assert(node->left->type == NODE_GREATER_THAN);
+  assert(node->left->left->type == NODE_VARIABLE);
+  assert(node->left->right->type == NODE_NUMBER);
+  assert(node->right->type == NODE_STATEMENT_LIST);
+  assert(node->right->left->type == NODE_MINUS);
+  assert(node->right->left->left->type == NODE_VARIABLE);
+  assert(node->right->left->right->type == NODE_NUMBER);
+  assert(node->right->right->type == NODE_STATEMENT_LIST);
+  assert(node->right->right->left->type == NODE_MINUS);
+  assert(node->right->right->left->left->type == NODE_VARIABLE);
+  assert(node->right->right->left->right->type == NODE_NUMBER);
+  assert(node->right->right->right == NULL);
+
+  printf("test_while_block passed.\n");
   free_state(state);
 }

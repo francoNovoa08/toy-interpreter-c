@@ -49,6 +49,9 @@ AST_Node *AST_build_node_from_token(Token token) {
   case TOKEN_IF:
     new_node->type = NODE_IF;
     break;
+  case TOKEN_WHILE:
+    new_node->type = NODE_WHILE;
+    break;
   default:
     return NULL;
   }

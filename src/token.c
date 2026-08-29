@@ -132,6 +132,8 @@ Token *tokenise_string(char *string, size_t *tokens) {
 
     if (is_if_keyword(&string[i], counter)) {
       token.type = TOKEN_IF;
+    } else if (is_while_keyword(&string[i], counter)) {
+      token.type = TOKEN_WHILE;
     } else {
       token.type = TOKEN_IDENTIFIER;
       token.value.identifier.start = &string[i];

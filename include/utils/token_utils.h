@@ -23,4 +23,14 @@ void remove_all_whitespace(char *string);
  */
 bool is_if_keyword(const char *start, size_t length);
 
+/**
+ * @brief Checks if some tokenised string is a "while" keyword
+ *
+ * @param start The pointer to the start of the string
+ * @param length The number of characters in the string
+ * 
+ * @return True if the string is a "while" keyword
+ */
+bool is_while_keyword(const char *start, size_t length);
+
 #endif // TOKEN_UTILS_H
