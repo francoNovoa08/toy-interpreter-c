@@ -17,6 +17,6 @@ typedef enum {
   EVALUATE_ERR_MEMORY_ALLOCATION, // Unable to build variable name from ndoe
 } ErrorCode;
 
-const char *get_parser_error_message(ErrorCode code);
+const char *get_error_message(ErrorCode code);
 
 #endif // ERRORS_H

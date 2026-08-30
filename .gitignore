@@ -7,5 +7,6 @@ a.out
 test_token
 test_parser
 test_evaluate
+interpreter
 
 compile_flags.txt

@@ -6,6 +6,8 @@ LIB_SRC = src/token.c src/utils/token_utils.c src/parser.c src/utils/data_struct
 		  src/utils/evaluate_utils.c src/utils/data_structures/symbol_table.c \
 		  src/utils/parser_utils.c
 
+MAIN_SRC = src/main.c
+
 TARGET = interpreter
 
 TEST_TOKEN_SRC = tests/test_token.c
@@ -17,8 +19,8 @@ TEST_PARSER_TARGET = test_parser
 TEST_EVALUATE_SRC = tests/test_evaluate.c
 TEST_EVALUATE_TARGET = test_evaluate
 
-$(TARGET): $(LIB_SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(LIB_SRC)
+$(TARGET): $(LIB_SRC) $(MAIN_SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(LIB_SRC) $(MAIN_SRC)
 
 $(TEST_TOKEN_TARGET): $(LIB_SRC) $(TEST_TOKEN_SRC)
 	$(CC) $(CFLAGS) -o $(TEST_TOKEN_TARGET) $(LIB_SRC) $(TEST_TOKEN_SRC)
