@@ -69,6 +69,23 @@ EvaluationResult evaluate(AST_Node *tree, SymbolTable *table) {
     return right_result;
   }
 
+  if (tree->type == NODE_WHILE) {
+    while (left_result.result == 1) {
+      EvaluationResult right_result = evaluate(tree->right, table);
+      if (right_result.error != SUCCESS) {
+        return right_result;
+      }
+      left_result = evaluate(tree->left, table);
+      if (left_result.error != SUCCESS) {
+        return left_result;
+      }
+    }
+
+    result.result = 0;
+    result.error = SUCCESS;
+    return result;
+  }
+
   EvaluationResult right_result = evaluate(tree->right, table);
   if (right_result.error != SUCCESS)
     return right_result;

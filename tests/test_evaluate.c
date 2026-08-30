@@ -19,6 +19,8 @@ void test_if_statement_block();
 void test_invalid_if_block();
 void test_invalid_if_condition();
 
+void test_single_while_loop();
+
 int main() {
   test_single_node_AST();
   test_multi_node_AST();
@@ -33,6 +35,8 @@ int main() {
   test_if_statement_block();
   test_invalid_if_block();
   test_invalid_if_condition();
+
+  test_single_while_loop();
 
   printf("All evaluate tests passed.\n");
   return 0;
@@ -267,5 +271,30 @@ void test_invalid_if_condition() {
 
   printf("test_invalid_if_condition passed.\n");
   free_state(state);
+  free(table);
+}
+
+void test_single_while_loop() {
+  // Arrange
+  char input[] = "x = 0";
+  SymbolTable *table = SymbolTable_create();
+  ParserState *state = make_state_from_input(input);
+  evaluate(parse_statement(state), table);
+  char input2[] = "while (x < 4) {x = x + 1}";
+  ParserState *state2 = make_state_from_input(input2);
+  AST_Node *node = parse_statement(state2);
+  
+  int out_value;
+
+  // Act
+  evaluate(node, table);
+
+  // Assert
+  assert(SymbolTable_get(table, "x", &out_value) == true);
+  assert(out_value == 4);
+
+  printf("test_single_while_loop passed.\n");
+  free_state(state);
+  free_state(state2);
   free(table);
 }
