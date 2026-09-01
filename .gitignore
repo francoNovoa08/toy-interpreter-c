@@ -7,6 +7,9 @@ a.out
 test_token
 test_parser
 test_evaluate
+test_analyse
+test_codegen
 interpreter
+test_output.s
 
 compile_flags.txt
