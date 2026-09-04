@@ -3,6 +3,7 @@
 a.out
 *.exe
 *.out
+*.s
 
 test_token
 test_parser
@@ -11,5 +12,6 @@ test_analyse
 test_codegen
 interpreter
 test_output.s
+output
 
 compile_flags.txt

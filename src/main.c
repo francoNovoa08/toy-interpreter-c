@@ -1,4 +1,5 @@
 #include "analyse.h"
+#include "codegen.h"
 #include "evaluate.h"
 #include "parser.h"
 #include "utils/data_structures/symbol_table.h"
@@ -8,9 +9,17 @@
 
 int main() {
   char buffer[256];
+  char mode_buffer[32];
   char result_str[20];
   SymbolTable *table = SymbolTable_create();
   HashMap *set = HashMap_create();
+
+  printf("Enter mode (interpret/codegen): \n");
+  fgets(mode_buffer, sizeof(mode_buffer), stdin);
+  mode_buffer[strcspn(mode_buffer, "\n")] = 0;
+
+  bool codegen_mode = (strcmp(mode_buffer, "codegen") == 0);
+
   printf("Enter text to interpret.\n");
 
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
@@ -33,6 +42,11 @@ int main() {
       printf("%s\n", get_error_message(state->error));
       free(state->tokens);
       free(state);
+      continue;
+    }
+
+    if (codegen_mode) {
+      codegen(tree, "output.s");
       continue;
     }
 
